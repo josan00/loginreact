@@ -1,10 +1,12 @@
-import React from 'react'
-import '../node_modules/bootstrap/dist/css/bootstrap.min.css'
-import './App.css'
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom'
+import React from 'react';
+import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
+import './App.css';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
-import Login from './components/login.component'
-import SignUp from './components/signup.component'
+import Login from './components/login.component';
+import SignUp from './components/signup.component';
+import Admin from './components/admin.component';
+import PrivateRoute from './components/PrivateRoute';
 
 function App() {
   return (
@@ -13,18 +15,18 @@ function App() {
         <nav className="navbar navbar-expand-lg navbar-light fixed-top">
           <div className="container">
             <Link className="navbar-brand" to={'/sign-in'}>
-              positronX
+              Universidad Don Bosco
             </Link>
             <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
               <ul className="navbar-nav ml-auto">
                 <li className="nav-item">
                   <Link className="nav-link" to={'/sign-in'}>
-                    Login
+                    Ingresar
                   </Link>
                 </li>
                 <li className="nav-item">
                   <Link className="nav-link" to={'/sign-up'}>
-                    Sign up
+                    Registrarse
                   </Link>
                 </li>
               </ul>
@@ -38,12 +40,14 @@ function App() {
               <Route exact path="/" element={<Login />} />
               <Route path="/sign-in" element={<Login />} />
               <Route path="/sign-up" element={<SignUp />} />
+              <Route path="/admin" element={<PrivateRoute><Admin /></PrivateRoute>} />
             </Routes>
           </div>
         </div>
       </div>
     </Router>
-  )
+  );
 }
 
-export default App
+export default App;
+
