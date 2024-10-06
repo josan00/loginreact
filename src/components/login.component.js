@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 
 // Función personalizada withRouter
 const withRouter = (Component) => {
@@ -29,12 +30,29 @@ class Login extends Component {
     e.preventDefault();
     const { email, password } = this.state;
     try {
+      console.log('Enviando solicitud de inicio de sesión');
       const res = await axios.post('http://localhost:3000/login', { username: email, password });
-      if (res.data.message === 'Login correcto') {
-        localStorage.setItem('token', 'your-token'); // Guarda el token en localStorage
-        this.props.navigate('/admin'); // Redirige a /admin
+      console.log('Respuesta del servidor:', res.data);
+      if (res.data.token) {
+        localStorage.setItem('token', res.data.token); // Guarda el token en localStorage
+        const decodedToken = jwtDecode(res.data.token);
+        const role = decodedToken.role;
+        console.log('Rol del usuario:', role);
+        if (role === 'Administrador') {
+          console.log('Redirigiendo a /admin');
+          this.props.navigate('/admin'); // Redirige a /admin
+        } else if (role === 'Manager') {
+          console.log('Redirigiendo a /manager');
+          this.props.navigate('/manager'); // Redirige a /manager
+        } else {
+          console.log('Redirigiendo a /');
+          this.props.navigate('/'); // Redirige a la página principal o a otra ruta por defecto
+        }
+      } else {
+        this.setState({ error: 'Credenciales incorrectas' });
       }
     } catch (err) {
+      console.log('Error en el inicio de sesión:', err);
       this.setState({ error: 'Credenciales incorrectas' });
     }
   };
@@ -97,6 +115,8 @@ class Login extends Component {
 }
 
 export default withRouter(Login);
+
+
 
 
 /*export default class Login extends Component {

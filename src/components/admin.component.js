@@ -13,6 +13,9 @@ const Admin = () => {
         <div>
             <h2>Pagina Admin</h2>
             <p>Bienvenido al panel de administracion.</p>
+            <h3>Que deseas hacer?</h3>
+            <button>Menu de usuarios usuarios</button><br/><br/>
+            <button>Menu de proyectos</button><br/><br/>
             <button onClick={handleLogout} className='btn btn-danger'>Salir</button>
         </div>
     );
