@@ -50,6 +50,25 @@ app.post('/login', (req, res) => {
     });
 });
 
+app.post('/register', async (req, res) => {
+    const { username, password, nombre, apellido } = req.body;
+    try {
+        const hashedPassword = await bcrypt.hash(password, 10);
+        const query = 'INSERT INTO users (username, password, nombre, apellido) VALUES (?, ?, ?, ?)';
+        db.query(query, [username, hashedPassword, nombre, apellido], (err, results) => {
+            if (err) {
+                console.error('Error insertando usuario en la base de datos', err);
+                res.status(500).send('Error registrando usuario');
+                return;
+            }
+            res.status(200).send('Usuario registrado exitosamente');
+        });
+    } catch (err) {
+        console.error('Error encriptando la contraseña', err);
+        res.status(500).send('Error registrando usuario');
+    }
+});
+
 app.listen(3000, () => {
     console.log('Server running on port 3000');
 });
