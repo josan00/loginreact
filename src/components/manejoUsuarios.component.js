@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import {bcrypt} from 'bcryptjs';
 
 export default class ManejoUsuarios extends Component {
   constructor(props) {
@@ -8,8 +7,9 @@ export default class ManejoUsuarios extends Component {
     this.state = {
       username: '',
       password: '',
-      nombre: '',
-      apellido: '',
+      name: '',
+      lastname: '',
+      role: 'Member', // Valor por defecto
       error: '',
       success: ''
     };
@@ -21,15 +21,14 @@ export default class ManejoUsuarios extends Component {
 
   handleSubmit = async (e) => {
     e.preventDefault();
-    const { username, password, nombre, apellido } = this.state;
+    const { username, password, name, lastname, role } = this.state;
     try {
-      const hashedPassword = bcrypt.hashSync(password, 10); // Usar hashSync para encriptar la contraseña
-      console.log('hashed password:', hashedPassword);
       const res = await axios.post('http://localhost:3000/register', {
         username,
-        password: hashedPassword,
-        nombre,
-        apellido
+        password,
+        name,
+        lastname,
+        role
       });
       this.setState({ success: 'Usuario registrado exitosamente', error: '' });
     } catch (err) {
@@ -49,8 +48,8 @@ export default class ManejoUsuarios extends Component {
             type="text"
             className="form-control"
             placeholder="Nombre"
-            name="nombre"
-            value={this.state.nombre}
+            name="name"
+            value={this.state.name}
             onChange={this.handleChange}
           />
         </div>
@@ -61,8 +60,8 @@ export default class ManejoUsuarios extends Component {
             type="text"
             className="form-control"
             placeholder="Apellido"
-            name="apellido"
-            value={this.state.apellido}
+            name="lastname"
+            value={this.state.lastname}
             onChange={this.handleChange}
           />
         </div>
@@ -89,6 +88,20 @@ export default class ManejoUsuarios extends Component {
             value={this.state.password}
             onChange={this.handleChange}
           />
+        </div>
+
+        <div className="mb-3">
+          <label>Rol</label>
+          <select
+            className="form-control"
+            name="role"
+            value={this.state.role}
+            onChange={this.handleChange}
+          >
+            <option value="Admin">Administrador</option>
+            <option value="Manager">Manager</option>
+            <option value="Member">Member</option>
+          </select>
         </div>
 
         {this.state.error && <div className="alert alert-danger">{this.state.error}</div>}
