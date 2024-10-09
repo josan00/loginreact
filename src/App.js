@@ -7,7 +7,7 @@ import Login from './components/login.component';
 import SignUp from './components/signup.component';
 import Admin from './components/admin.component';
 import Manager from './components/manager.component';
-import ManejoUsuarios from './components/manejoUsuarios.component';
+import ManejoUsuariosWrapper from './components/manejoUsuariosWrapper';
 import ManejoProyectos from './components/manejoProyectos.component';
 import PrivateRoute from './components/PrivateRoute';
 
@@ -44,9 +44,8 @@ function App() {
               <Route path="/sign-in" element={<Login />} />
               <Route path="/sign-up" element={<SignUp />} />
               <Route path="/admin" element={<Admin />} /> {/* Ruta no privada temporalmente */}
-              {/*<Route path="/admin" element={<PrivateRoute role="admin"><Admin /></PrivateRoute>} /> Comentada porque rutas privadas no funcionan con verificaion de token*/}
               <Route path="/manager" element={<Manager />} /> {/* Ruta no privada temporalmente */}
-              <Route path="/manejoUsuarios" element={<ManejoUsuarios />} /> {/* Ruta no privada temporalmente */}
+              <Route path="/manejoUsuarios" element={<ManejoUsuariosWrapper />} /> {/* Ruta pública temporalmente */}
               <Route path="/manejoProyectos" element={<ManejoProyectos />} /> {/* Ruta no privada temporalmente */}
             </Routes>
           </div>

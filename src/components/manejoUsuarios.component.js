@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export default class ManejoUsuarios extends Component {
   constructor(props) {
@@ -22,6 +23,13 @@ export default class ManejoUsuarios extends Component {
   handleSubmit = async (e) => {
     e.preventDefault();
     const { username, password, name, lastname, role } = this.state;
+
+    // Validación para evitar campos vacíos o solo espacios
+    if (!username.trim() || !password.trim() || !name.trim() || !lastname.trim()) {
+      this.setState({ error: 'Todos los campos son obligatorios y no pueden estar vacíos.', success: '' });
+      return;
+    }
+
     try {
       const res = await axios.post('http://localhost:3000/register', {
         username,
@@ -30,11 +38,23 @@ export default class ManejoUsuarios extends Component {
         lastname,
         role
       });
-      this.setState({ success: 'Usuario registrado exitosamente', error: '' });
+      this.setState({
+        username: '',
+        password: '',
+        name: '',
+        lastname: '',
+        role: 'Member',
+        success: 'Usuario registrado exitosamente',
+        error: ''
+      });
     } catch (err) {
       console.error('Error registrando usuario:', err);
       this.setState({ error: 'Error registrando usuario', success: '' });
     }
+  };
+
+  handleBack = () => {
+    this.props.navigate('/admin'); // Redirige a la página de administración
   };
 
   render() {
@@ -110,6 +130,12 @@ export default class ManejoUsuarios extends Component {
         <div className="d-grid">
           <button type="submit" className="btn btn-primary">
             Registrar
+          </button>
+        </div>
+
+        <div className="d-grid mt-3">
+          <button type="button" className="btn btn-danger" onClick={this.handleBack}>
+            Regresar
           </button>
         </div>
       </form>
