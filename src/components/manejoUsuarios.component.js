@@ -20,6 +20,25 @@ export default class ManejoUsuarios extends Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
+  /* Prueba de barra de busqueda
+  handleSearchChange = async (e) =>{
+    const searchQuery = e.target.value;
+    this.setState({ searchQuery});
+
+    if (searchQuery.trim()){
+      try {
+        const res = await axios.get('http://localhost:3000/search?query=${searchQuery}');
+        this.setState({searchResults: res.data});
+      } catch (err) {
+        console.error('Error buscando usuarios: ', err);
+        this.setState({error: 'Error buscando usuarios', success:''});
+      }
+    }else {
+      this.setState({searchResults: [] });
+    }
+  };
+*/
+
   handleSubmit = async (e) => {
     e.preventDefault();
     const { username, password, name, lastname, role } = this.state;
@@ -59,6 +78,7 @@ export default class ManejoUsuarios extends Component {
 
   render() {
     return (
+
       <form onSubmit={this.handleSubmit}>
         <h3>Registrar Usuario</h3>
 
