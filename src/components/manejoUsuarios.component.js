@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export default class ManejoUsuarios extends Component {
   constructor(props) {
@@ -19,9 +20,35 @@ export default class ManejoUsuarios extends Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
+  /* Prueba de barra de busqueda
+  handleSearchChange = async (e) =>{
+    const searchQuery = e.target.value;
+    this.setState({ searchQuery});
+
+    if (searchQuery.trim()){
+      try {
+        const res = await axios.get('http://localhost:3000/search?query=${searchQuery}');
+        this.setState({searchResults: res.data});
+      } catch (err) {
+        console.error('Error buscando usuarios: ', err);
+        this.setState({error: 'Error buscando usuarios', success:''});
+      }
+    }else {
+      this.setState({searchResults: [] });
+    }
+  };
+*/
+
   handleSubmit = async (e) => {
     e.preventDefault();
     const { username, password, name, lastname, role } = this.state;
+
+    // Validación para evitar campos vacíos o solo espacios
+    if (!username.trim() || !password.trim() || !name.trim() || !lastname.trim()) {
+      this.setState({ error: 'Todos los campos son obligatorios y no pueden estar vacíos.', success: '' });
+      return;
+    }
+
     try {
       const res = await axios.post('http://localhost:3000/register', {
         username,
@@ -30,15 +57,28 @@ export default class ManejoUsuarios extends Component {
         lastname,
         role
       });
-      this.setState({ success: 'Usuario registrado exitosamente', error: '' });
+      this.setState({
+        username: '',
+        password: '',
+        name: '',
+        lastname: '',
+        role: 'Member',
+        success: 'Usuario registrado exitosamente',
+        error: ''
+      });
     } catch (err) {
       console.error('Error registrando usuario:', err);
       this.setState({ error: 'Error registrando usuario', success: '' });
     }
   };
 
+  handleBack = () => {
+    this.props.navigate('/admin'); // Redirige a la página de administración
+  };
+
   render() {
     return (
+
       <form onSubmit={this.handleSubmit}>
         <h3>Registrar Usuario</h3>
 
@@ -112,9 +152,13 @@ export default class ManejoUsuarios extends Component {
             Registrar
           </button>
         </div>
+
+        <div className="d-grid mt-3">
+          <button type="button" className="btn btn-danger" onClick={this.handleBack}>
+            Regresar
+          </button>
+        </div>
       </form>
     );
   }
 }
-
-
