@@ -11,7 +11,7 @@ const Manager = () => {
 
   return (
         <div>
-            <h2>Pagina Manager</h2>
+            <h2>Vista Manager</h2>
             <p>Bienvenido al panel de administracion para managers.</p>
             <button onClick={handleLogout} className='btn btn-danger'>Salir</button>
         </div>
