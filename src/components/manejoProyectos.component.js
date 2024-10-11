@@ -1,126 +1,69 @@
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { obtenerProyectos, crearProyecto, eliminarProyecto } from '../services/proyectoService';
 
 const ManejoProyectos = () => {
-    // Estado para los proyectos
     const [proyectos, setProyectos] = useState([]);
-    const [nombreProyecto, setNombreProyecto] = useState('');
-    const [editando, setEditando] = useState(false);
-    const [proyectoActual, setProyectoActual] = useState(null);
+    const [nuevoProyecto, setNuevoProyecto] = useState({ nombre: '', descripcion: '', fecha_inicio: '', fecha_fin: '' });
 
-    // Simulación de llamada a la API para cargar proyectos
     useEffect(() => {
-        const fetchProyectos = async () => {
-            try {
-                const response = await axios.get('https://localhost:5000/api/proyectos');
-                setProyectos(response.data);
-            } catch (error) {
-                console.error('Error cargando proyectos:', error);
-            }
-        };
-        fetchProyectos();
+        cargarProyectos();
     }, []);
 
-    // Manejar la creación o edición de un proyecto
+    const cargarProyectos = async () => {
+        try {
+            const proyectosObtenidos = await obtenerProyectos();
+            setProyectos(proyectosObtenidos);
+        } catch (error) {
+            console.error('Error al cargar los proyectos', error);
+        }
+    };
+
+    const manejarCambio = (e) => {
+        const { name, value } = e.target;
+        setNuevoProyecto({ ...nuevoProyecto, [name]: value });
+    };
+
     const manejarSubmit = async (e) => {
         e.preventDefault();
-        if (editando) {
-            // Editar un proyecto
-            try {
-                await axios.put(`http://localhost:5000/api/proyectos/${proyectoActual.id}`, { nombre: nombreProyecto });
-                setProyectos(proyectos.map((proyecto) =>
-                    proyecto.id === proyectoActual.id ? { ...proyecto, nombre: nombreProyecto } : proyecto
-                ));
-                setEditando(false);
-                setProyectoActual(null);
-                setNombreProyecto('');
-            } catch (error) {
-                console.error('Error editando proyecto:', error);
-            }
-        } else {
-            // Crear un nuevo proyecto
-            try {
-                const response = await axios.post('http://localhost:5000/api/proyectos', { nombre: nombreProyecto });
-                setProyectos([...proyectos, response.data]);
-                setNombreProyecto('');
-            } catch (error) {
-                console.error('Error creando proyecto:', error);
-            }
-        }
-    };
-
-    // Manejar la eliminación de un proyecto
-    const eliminarProyecto = async (id) => {
         try {
-            await axios.delete(`http://localhost:5000/api/proyectos/${id}`);
-            setProyectos(proyectos.filter((proyecto) => proyecto.id !== id));
+            await crearProyecto(nuevoProyecto);
+            cargarProyectos(); // Volver a cargar los proyectos
         } catch (error) {
-            console.error('Error eliminando proyecto:', error);
+            console.error('Error al crear el proyecto', error);
         }
     };
 
-    // Manejar la edición de un proyecto
-    const iniciarEdicion = (proyecto) => {
-        setEditando(true);
-        setProyectoActual(proyecto);
-        setNombreProyecto(proyecto.nombre);
+    const manejarEliminar = async (id) => {
+        try {
+            await eliminarProyecto(id);
+            cargarProyectos();
+        } catch (error) {
+            console.error('Error al eliminar el proyecto', error);
+        }
     };
 
     return (
-        <div className="container">
-            <h2 className="mt-4">Manejo de Proyectos</h2>
+        <div>
+            <h2>Gestión de Proyectos</h2>
 
-            {/* Formulario para crear/editar proyectos */}
-            <form onSubmit={manejarSubmit} className="my-4">
-                <div className="form-group">
-                    <input
-                        type="text"
-                        className="form-control"
-                        placeholder="Nombre del Proyecto"
-                        value={nombreProyecto}
-                        onChange={(e) => setNombreProyecto(e.target.value)}
-                        required
-                    />
-                </div>
-                <button type="submit" className="btn btn-primary">
-                    {editando ? 'Guardar Cambios' : 'Crear Proyecto'}
-                </button>
-                {editando && (
-                    <button
-                        type="button"
-                        className="btn btn-secondary ml-2"
-                        onClick={() => {
-                            setEditando(false);
-                            setNombreProyecto('');
-                        }}
-                    >
-                        Cancelar
-                    </button>
-                )}
+            <form onSubmit={manejarSubmit}>
+                <input type="text" name="nombre" placeholder="Nombre" onChange={manejarCambio} />
+                <input type="text" name="descripcion" placeholder="Descripción" onChange={manejarCambio} />
+                <input type="date" name="fecha_inicio" onChange={manejarCambio} />
+                <input type="date" name="fecha_fin" onChange={manejarCambio} />
+                <button type="submit">Crear Proyecto</button>
             </form>
 
-            {/* Listado de proyectos */}
-            <div className="mt-4">
-                <h3>Proyectos</h3>
-                <ul className="list-group">
-                    {proyectos.map((proyecto) => (
-                        <li key={proyecto.id} className="list-group-item d-flex justify-content-between align-items-center">
-                            {proyecto.nombre}
-                            <div>
-                                <button className="btn btn-sm btn-info" onClick={() => iniciarEdicion(proyecto)}>
-                                    Editar
-                                </button>
-                                <button className="btn btn-sm btn-danger ml-2" onClick={() => eliminarProyecto(proyecto.id)}>
-                                    Eliminar
-                                </button>
-                            </div>
-                        </li>
-                    ))}
-                </ul>
-            </div>
+            <ul>
+                {proyectos.map((proyecto) => (
+                    <li key={proyecto.id}>
+                        {proyecto.nombre} - {proyecto.descripcion}
+                        <button onClick={() => manejarEliminar(proyecto.id)}>Eliminar</button>
+                    </li>
+                ))}
+            </ul>
         </div>
     );
 };
 
 export default ManejoProyectos;
-
