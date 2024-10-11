@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import {bcrypt} from 'bcryptjs';
+import { useNavigate } from 'react-router-dom';
 
 export default class ManejoUsuarios extends Component {
   constructor(props) {
@@ -8,8 +8,9 @@ export default class ManejoUsuarios extends Component {
     this.state = {
       username: '',
       password: '',
-      nombre: '',
-      apellido: '',
+      name: '',
+      lastname: '',
+      role: 'Member', // Valor por defecto
       error: '',
       success: ''
     };
@@ -19,27 +20,65 @@ export default class ManejoUsuarios extends Component {
     this.setState({ [e.target.name]: e.target.value });
   };
 
+  /* Prueba de barra de busqueda
+  handleSearchChange = async (e) =>{
+    const searchQuery = e.target.value;
+    this.setState({ searchQuery});
+
+    if (searchQuery.trim()){
+      try {
+        const res = await axios.get('http://localhost:3000/search?query=${searchQuery}');
+        this.setState({searchResults: res.data});
+      } catch (err) {
+        console.error('Error buscando usuarios: ', err);
+        this.setState({error: 'Error buscando usuarios', success:''});
+      }
+    }else {
+      this.setState({searchResults: [] });
+    }
+  };
+*/
+
   handleSubmit = async (e) => {
     e.preventDefault();
-    const { username, password, nombre, apellido } = this.state;
+    const { username, password, name, lastname, role } = this.state;
+
+    // Validación para evitar campos vacíos o solo espacios
+    if (!username.trim() || !password.trim() || !name.trim() || !lastname.trim()) {
+      this.setState({ error: 'Todos los campos son obligatorios y no pueden estar vacíos.', success: '' });
+      return;
+    }
+
     try {
-      const hashedPassword = bcrypt.hashSync(password, 10); // Usar hashSync para encriptar la contraseña
-      console.log('hashed password:', hashedPassword);
       const res = await axios.post('http://localhost:3000/register', {
         username,
-        password: hashedPassword,
-        nombre,
-        apellido
+        password,
+        name,
+        lastname,
+        role
       });
-      this.setState({ success: 'Usuario registrado exitosamente', error: '' });
+      this.setState({
+        username: '',
+        password: '',
+        name: '',
+        lastname: '',
+        role: 'Member',
+        success: 'Usuario registrado exitosamente',
+        error: ''
+      });
     } catch (err) {
       console.error('Error registrando usuario:', err);
       this.setState({ error: 'Error registrando usuario', success: '' });
     }
   };
 
+  handleBack = () => {
+    this.props.navigate('/admin'); // Redirige a la página de administración
+  };
+
   render() {
     return (
+
       <form onSubmit={this.handleSubmit}>
         <h3>Registrar Usuario</h3>
 
@@ -49,8 +88,8 @@ export default class ManejoUsuarios extends Component {
             type="text"
             className="form-control"
             placeholder="Nombre"
-            name="nombre"
-            value={this.state.nombre}
+            name="name"
+            value={this.state.name}
             onChange={this.handleChange}
           />
         </div>
@@ -61,8 +100,8 @@ export default class ManejoUsuarios extends Component {
             type="text"
             className="form-control"
             placeholder="Apellido"
-            name="apellido"
-            value={this.state.apellido}
+            name="lastname"
+            value={this.state.lastname}
             onChange={this.handleChange}
           />
         </div>
@@ -91,12 +130,32 @@ export default class ManejoUsuarios extends Component {
           />
         </div>
 
+        <div className="mb-3">
+          <label>Rol</label>
+          <select
+            className="form-control"
+            name="role"
+            value={this.state.role}
+            onChange={this.handleChange}
+          >
+            <option value="Admin">Administrador</option>
+            <option value="Manager">Manager</option>
+            <option value="Member">Member</option>
+          </select>
+        </div>
+
         {this.state.error && <div className="alert alert-danger">{this.state.error}</div>}
         {this.state.success && <div className="alert alert-success">{this.state.success}</div>}
 
         <div className="d-grid">
           <button type="submit" className="btn btn-primary">
             Registrar
+          </button>
+        </div>
+
+        <div className="d-grid mt-3">
+          <button type="button" className="btn btn-danger" onClick={this.handleBack}>
+            Regresar
           </button>
         </div>
       </form>
