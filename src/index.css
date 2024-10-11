@@ -82,3 +82,20 @@ html,
 .forgot-password a {
   color: #167bff;
 }
+
+.center-button {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.form-container {
+  margin-top: 20px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5px; /*valor de separacion al tope */
+}

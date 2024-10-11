@@ -63,6 +63,35 @@ app.post('/register', (req, res) => {
     });
 });
 
+// Ruta para obtener todos los usuarios
+app.get('/users', (req, res) => {
+    console.log('Peticion de busqueda recibida en /users');
+    const query = 'SELECT id, username, name, lastname, role FROM users';
+    db.query(query, (err, results) => {
+        if (err) {
+            console.error('Error en la consulta a la base de datos', err);
+            res.status(500).send('Error en la búsqueda de usuarios');
+            return;
+        }
+        res.json(results);
+    });
+});
+
+//ruta para eliminar usuarios
+app.delete('/users/:id',(req, res)=>{
+    const userID = req.params.id;
+    const query = 'DELETE FROM users WHERE id = ?';
+    db.query(query, [userID], (err, results)=>{
+        if(err){
+            console.error('Error elimnando usuario', err);
+            res.status(500).send('Error eliminando usuario');
+            return;
+        }
+        res.status(200).send('USuario eliminado exitosamente');
+    });
+});
+
+
 app.listen(3000, () => {
     console.log('Server running on port 3000');
 });

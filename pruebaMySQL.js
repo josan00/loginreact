@@ -4,10 +4,10 @@ const app = express();
 const port = 3000;
 
 const db = mysql.createConnection({
-  host: ' sql5.freemysqlhosting.net',
-  user: 'sql5736216',
-  password: 'ZlQwgrEvrv',
-  database: 'sql5736216',
+  host: ' 34.45.234.180',
+  user: 'root',
+  password: 'labv2802',
+  database: 'users',
   port: '3306'
 });
 
