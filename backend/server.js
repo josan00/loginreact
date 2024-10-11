@@ -8,12 +8,21 @@ app.use(cors());
 app.use(express.json());
 
 const db = mysql.createConnection({
+    host: '34.45.234.180',
+    user: 'root',
+    password: 'labv2802',
+    database: 'users',
+    port: 3306
+});
+
+/* Conexion correcta local
+const db = mysql.createConnection({
     host: 'localhost',
     user: 'admin',
     password: 'admin',
     database: 'react_login',
     port: 3306
-});
+});*/
 
 db.connect(err => {
     if (err) {
@@ -91,7 +100,12 @@ app.delete('/users/:id',(req, res)=>{
     });
 });
 
-
+/* Consola log para saber puerto local
 app.listen(3000, () => {
     console.log('Server running on port 3000');
+}); */
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });
