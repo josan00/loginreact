@@ -73,6 +73,15 @@ export default class ManejoUsuarios extends Component {
     this.setState({ showModal: false });
   };
 
+  handleDeleteUser = async (userId) => {
+    try {
+      await axios.delete(`http://localhost:3000/users/${userId}`);
+      this.setState({ users: this.state.users.filter(user => user.id !== userId) });
+    } catch (err) {
+      console.error('Error deleting user:', err);
+    }
+  };
+
   render() {
     return (
       <>
@@ -94,6 +103,7 @@ export default class ManejoUsuarios extends Component {
                   <th>Apellido</th>
                   <th>Correo Electrónico</th>
                   <th>Rol</th>
+                  <th>Acciones</th>
                 </tr>
               </thead>
               <tbody>
@@ -103,6 +113,10 @@ export default class ManejoUsuarios extends Component {
                     <td>{user.lastname}</td>
                     <td>{user.username}</td>
                     <td>{user.role}</td>
+                    <td>
+                      <Button variant="warning" onClick={() => console.log('Editar usuario', user.id)}>Editar</Button>{' '}
+                      <Button variant="danger" onClick={() => this.handleDeleteUser(user.id)}>Eliminar</Button>
+                    </td>
                   </tr>
                 ))}
               </tbody>

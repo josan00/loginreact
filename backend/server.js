@@ -77,6 +77,20 @@ app.get('/users', (req, res) => {
     });
 });
 
+//ruta para eliminar usuarios
+app.delete('/users/:id',(req, res)=>{
+    const userID = req.params.id;
+    const query = 'DELETE FROM users WHERE id = ?';
+    db.query(query, [userID], (err, results)=>{
+        if(err){
+            console.error('Error elimnando usuario', err);
+            res.status(500).send('Error eliminando usuario');
+            return;
+        }
+        res.status(200).send('USuario eliminado exitosamente');
+    });
+});
+
 
 app.listen(3000, () => {
     console.log('Server running on port 3000');
