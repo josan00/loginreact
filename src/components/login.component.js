@@ -31,7 +31,7 @@ class Login extends Component {
     const { email, password } = this.state;
     try {
       console.log('Enviando solicitud de inicio de sesión');
-      const res = await axios.post('http://34.45.234.180:3000/login', { username: email, password });//Prueba GCS login
+      const res = await axios.post('https://34.45.234.180:3000/login', { username: email, password });//Prueba GCS login
       console.log('Respuesta del servidor:', res.data);
       if (res.data.token) {
         localStorage.setItem('token', res.data.token); // Guarda el token en localStorage
