@@ -9,7 +9,8 @@ import Admin from './components/admin.component';
 import Manager from './components/manager.component';
 import ManejoUsuariosWrapper from './components/manejoUsuariosWrapper';
 import ManejoProyectos from './components/manejoProyectos.component';
-import PrivateRoute from './components/PrivateRoute';
+import ManejoTareas from './components/manejoTareas.component';
+/*import PrivateRoute from './components/PrivateRoute';*/
 
 function App() {
   return (
@@ -47,6 +48,7 @@ function App() {
               <Route path="/manager" element={<Manager />} /> {/* Ruta no privada temporalmente */}
               <Route path="/manejoUsuarios" element={<ManejoUsuariosWrapper />} /> {/* Ruta pública temporalmente */}
               <Route path="/manejoProyectos" element={<ManejoProyectos />} /> {/* Ruta no privada temporalmente */}
+              <Route path="/manejoTareas" element={<ManejoTareas />} /> {/* Ruta no privada temporalmente */}
             </Routes>
           </div>
         </div>

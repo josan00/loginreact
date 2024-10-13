@@ -33,9 +33,9 @@ const ManejoProyectos = () => {
         }
     };
 
-    const manejarEliminar = async (id) => {
+    const manejarEliminar = async (idProyecto) => {
         try {
-            await eliminarProyecto(id);
+            await eliminarProyecto(idProyecto);
             cargarProyectos();
         } catch (error) {
             console.error('Error al eliminar el proyecto', error);
@@ -56,7 +56,7 @@ const ManejoProyectos = () => {
 
             <ul>
                 {proyectos.map((proyecto) => (
-                    <li key={proyecto.id}>
+                    <li key={proyecto.idProyecto}>
                         {proyecto.nombre} - {proyecto.descripcion}
                         <button onClick={() => manejarEliminar(proyecto.id)}>Eliminar</button>
                     </li>
