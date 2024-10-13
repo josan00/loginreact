@@ -25,9 +25,9 @@ export const crearProyecto = async (proyecto) => {
 };
 
 // Actualizar un proyecto
-export const actualizarProyecto = async (id, proyecto) => {
+export const actualizarProyecto = async (idProyecto, proyecto) => {
     try {
-        const response = await axios.put(`${API_URL}/proyectos/${id}`, proyecto);
+        const response = await axios.put(`${API_URL}/proyectos/${idProyecto}`, proyecto);
         return response.data;
     } catch (error) {
         console.error('Error al actualizar el proyecto:', error);
@@ -36,9 +36,9 @@ export const actualizarProyecto = async (id, proyecto) => {
 };
 
 // Eliminar un proyecto
-export const eliminarProyecto = async (id) => {
+export const eliminarProyecto = async (idProyecto) => {
     try {
-        const response = await axios.delete(`${API_URL}/proyectos/${id}`);
+        const response = await axios.delete(`${API_URL}/proyectos/${idProyecto}`);
         return response.data;
     } catch (error) {
         console.error('Error al eliminar el proyecto:', error);
