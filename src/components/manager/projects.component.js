@@ -15,7 +15,11 @@ import {
   deleteTarea,
 } from "../../services/tareasService";
 
+import { obtenerUsuarios } from "../../services/usuarioService"
+
 const Projects = () => {
+  const [usuarios, setUsuarios] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null);
   const [projects, setProjects] = useState([]);
   const [idProject, setId] = useState(0);
   const [projectName, setProjectName] = useState("");
@@ -39,7 +43,18 @@ const Projects = () => {
   useEffect(() => {
     loadProjects();
     fetchTareas();
+    getUsers();
   }, []);
+
+  const getUsers = async () => {
+    try{
+      const data = await obtenerUsuarios();
+      setUsuarios(data);
+      console.log("Usuarios", usuarios)
+    } catch (error) {
+      console.error("Error al cargar los proyectos", error);
+    }
+  }
 
   const loadProjects = async () => {
     try {
@@ -370,6 +385,22 @@ const Projects = () => {
                 <option value="No iniciado">No iniciado</option>
                 <option value="En proceso">En proceso</option>
                 <option value="Terminado">Terminado</option>
+              </Form.Control>
+            </Form.Group>
+
+            <Form.Group controlId="formIdUser" className="mt-3">
+              <Form.Label>Asignar Usuario</Form.Label>
+              <Form.Control
+                as="select"
+                value={selectedUser}
+                onChange={(e) => setSelectedUser(e.target.value)}
+              >
+                <option value="">Seleccione un usuario</option> {/* Opción por defecto */}
+    {usuarios.map((usuario) => (
+      <option key={usuario.idUsuario} value={usuario.idUsuario}>
+        {usuario.nombreUsuario} {/* Aquí usas el nombre del usuario */}
+      </option>
+    ))}
               </Form.Control>
             </Form.Group>
 
