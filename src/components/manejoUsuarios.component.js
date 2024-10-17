@@ -85,6 +85,9 @@ export default class ManejoUsuarios extends Component {
   render() {
     return (
       <>
+      <div className="App">
+        <div className="auth-wrapper login">
+          <div className="auth-inner">
         <div className="button-container">
           <button type="button" className="btn btn-info" onClick={this.handleShowModal}>
             Buscar usuarios
@@ -213,6 +216,10 @@ export default class ManejoUsuarios extends Component {
             </div>
           </form>
         </div>
+
+        </div>
+      </div>
+    </div>
       </>
     );
   }

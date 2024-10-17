@@ -18,6 +18,9 @@ const Admin = () => {
     };
 
   return (
+    <div className="App">
+      <div className="auth-wrapper login">
+        <div className="auth-inner">
         <div>
             <h2>Pagina Admin</h2>
             <p>Bienvenido al panel de administracion.</p>
@@ -34,7 +37,10 @@ const Admin = () => {
         </div>
             <button onClick={handleLogout} className='btn btn-danger'>Salir</button>
         </div>
-    );
+      </div>
+    </div>
+  </div>
+  );
 };
 
 export default Admin;

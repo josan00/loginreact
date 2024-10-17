@@ -58,7 +58,7 @@ const ManejoProyectos = () => {
                 {proyectos.map((proyecto) => (
                     <li key={proyecto.idProyecto}>
                         {proyecto.nombre} - {proyecto.descripcion}
-                        <button onClick={() => manejarEliminar(proyecto.id)}>Eliminar</button>
+                        <button onClick={() => manejarEliminar(proyecto.idProyecto)}>Eliminar</button>
                     </li>
                 ))}
             </ul>

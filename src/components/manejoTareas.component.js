@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { getTareas, createTarea, updateTarea, deleteTarea } from '../services/tareasService';
 
-const manejoTareas = () => {
+const ManejoTareas = () => {
     const [tareas, setTareas] = useState([]);
     const [newTarea, setNewTarea] = useState({ nombreT: '', descripcionT: '', idProyecto: '', estado: '' });
     const [editTarea, setEditTarea] = useState(null);
@@ -131,4 +131,4 @@ const manejoTareas = () => {
     );
 };
 
-export default manejoTareas;
+export default ManejoTareas;
